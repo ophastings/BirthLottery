@@ -1,0 +1,6 @@
+Country,Outcome,Group,Predictor_Set,Min_Obs,Sample_Size,SuperLearner
+AUSTRALIA,top10,all,famincedu,3,1966,0.045
+GERMANY,top10,all,famincedu,3,2214,0.097
+KOREA,top10,all,famincedu,3,1273,0.121
+UK,top10,all,famincedu,3,1764,0.039
+USA,top10,all,famincedu,3,10543,0.128

@@ -1,0 +1,16 @@
+Algo,Weight,Country,Outcome,Group,Rep,Fold,Predictor_Set,Min_Obs
+SL.glmnet_All,0.5913483892615385,USA,top10,all,1,1,predictorsusa,1
+SL.ranger.fast_All,0.34011582117684536,USA,top10,all,1,1,predictorsusa,1
+SL.xgboost.fast_All,0.06853578956161602,USA,top10,all,1,1,predictorsusa,1
+SL.glmnet_All,0.5423375992253993,USA,top10,all,1,2,predictorsusa,1
+SL.ranger.fast_All,0.3456069790388353,USA,top10,all,1,2,predictorsusa,1
+SL.xgboost.fast_All,0.1120554217357653,USA,top10,all,1,2,predictorsusa,1
+SL.glmnet_All,0.59351969376686,USA,top10,all,1,3,predictorsusa,1
+SL.ranger.fast_All,0.25703865944853627,USA,top10,all,1,3,predictorsusa,1
+SL.xgboost.fast_All,0.14944164678460378,USA,top10,all,1,3,predictorsusa,1
+SL.glmnet_All,0.559980671636461,USA,top10,all,1,4,predictorsusa,1
+SL.ranger.fast_All,0.32354721589165586,USA,top10,all,1,4,predictorsusa,1
+SL.xgboost.fast_All,0.11647211247188306,USA,top10,all,1,4,predictorsusa,1
+SL.glmnet_All,0.5274739930575726,USA,top10,all,1,5,predictorsusa,1
+SL.ranger.fast_All,0.3127790097671795,USA,top10,all,1,5,predictorsusa,1
+SL.xgboost.fast_All,0.15974699717524787,USA,top10,all,1,5,predictorsusa,1

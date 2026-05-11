@@ -1,0 +1,5 @@
+Country,Outcome,Group,Predictor_Set,Min_Obs,Sample_Size,SuperLearner
+AUSTRALIA,education,all,predictors010,3,1895,0.184
+GERMANY,education,all,predictors010,3,1859,0.239
+KOREA,education,all,predictors010,3,1273,0.112
+USA,education,all,predictors010,3,10496,0.305

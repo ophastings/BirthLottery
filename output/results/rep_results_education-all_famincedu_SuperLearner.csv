@@ -1,0 +1,13 @@
+Country,Outcome,Group,Predictor_Set,Min_Obs,Rep,Sample_Size,SuperLearner
+AUSTRALIA,education,all,famincedu,1,1,2418,0.13326125664170602
+AUSTRALIA,education,all,famincedu,1,2,2418,0.13564853126578028
+AUSTRALIA,education,all,famincedu,1,3,2418,0.12894733521283064
+GERMANY,education,all,famincedu,1,1,2331,0.24155077955783166
+GERMANY,education,all,famincedu,1,2,2331,0.2404241505951746
+GERMANY,education,all,famincedu,1,3,2331,0.2426715333896304
+KOREA,education,all,famincedu,1,1,2126,0.10037192448615107
+KOREA,education,all,famincedu,1,2,2126,0.10134840485868915
+KOREA,education,all,famincedu,1,3,2126,0.09958105998485105
+USA,education,all,famincedu,1,1,11461,0.24091148170686386
+USA,education,all,famincedu,1,2,11461,0.2402570786267379
+USA,education,all,famincedu,1,3,11461,0.24115166603606

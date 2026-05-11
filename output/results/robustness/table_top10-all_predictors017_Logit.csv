@@ -1,0 +1,6 @@
+Country,Outcome,Group,Predictor_Set,Min_Obs,Sample_Size,R2
+AUSTRALIA,top10,all,predictors017,1,2512,0.046
+GERMANY,top10,all,predictors017,1,2765,0.194
+KOREA,top10,all,predictors017,1,2126,0.09
+UK,top10,all,predictors017,1,2528,0.043
+USA,top10,all,predictors017,1,11519,0.144

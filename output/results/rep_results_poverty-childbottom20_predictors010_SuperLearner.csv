@@ -1,0 +1,16 @@
+Country,Outcome,Group,Predictor_Set,Min_Obs,Rep,Sample_Size,SuperLearner
+AUSTRALIA,poverty,childbottom20,predictors010,1,1,505,0.007882723448780476
+AUSTRALIA,poverty,childbottom20,predictors010,1,2,505,0.024782612447190842
+AUSTRALIA,poverty,childbottom20,predictors010,1,3,505,0.010734861161900588
+GERMANY,poverty,childbottom20,predictors010,1,1,443,-0.013214662696362933
+GERMANY,poverty,childbottom20,predictors010,1,2,443,-0.009182442254234369
+GERMANY,poverty,childbottom20,predictors010,1,3,443,0.017382302226832038
+KOREA,poverty,childbottom20,predictors010,1,1,420,0.043413444893525256
+KOREA,poverty,childbottom20,predictors010,1,2,420,0.03841806765859161
+KOREA,poverty,childbottom20,predictors010,1,3,420,0.012944660865741801
+UK,poverty,childbottom20,predictors010,1,1,325,-0.016663941956473072
+UK,poverty,childbottom20,predictors010,1,2,325,-0.003034358070334987
+UK,poverty,childbottom20,predictors010,1,3,325,0.004509255247312405
+USA,poverty,childbottom20,predictors010,1,1,2274,0.06511705211921967
+USA,poverty,childbottom20,predictors010,1,2,2274,0.05830638338968226
+USA,poverty,childbottom20,predictors010,1,3,2274,0.06928724011447632

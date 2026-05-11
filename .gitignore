@@ -1,0 +1,11 @@
+# RStudio
+.Rproj.user/
+.Rhistory
+.RData
+.Ruserdata
+
+# Data files (require CNEF access — not for distribution)
+data/*.dta
+
+# OS
+.DS_Store

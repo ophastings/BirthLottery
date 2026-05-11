@@ -1,0 +1,16 @@
+Country,Outcome,Group,Predictor_Set,Min_Obs,Rep,Sample_Size,SuperLearner
+AUSTRALIA,adcont,all,famincedu,3,1,1966,0.14004751519934394
+AUSTRALIA,adcont,all,famincedu,3,2,1966,0.1376018522344632
+AUSTRALIA,adcont,all,famincedu,3,3,1966,0.1346847291435917
+GERMANY,adcont,all,famincedu,3,1,2214,0.12409399065860664
+GERMANY,adcont,all,famincedu,3,2,2214,0.11848021277718972
+GERMANY,adcont,all,famincedu,3,3,2214,0.1202064373917727
+KOREA,adcont,all,famincedu,3,1,1273,0.1704038710327738
+KOREA,adcont,all,famincedu,3,2,1273,0.1739019952201573
+KOREA,adcont,all,famincedu,3,3,1273,0.17714699991072666
+UK,adcont,all,famincedu,3,1,1405,0.06543091286158739
+UK,adcont,all,famincedu,3,2,1405,0.07917013066416818
+UK,adcont,all,famincedu,3,3,1405,0.07139009535361725
+USA,adcont,all,famincedu,3,1,10542,0.3087843954179971
+USA,adcont,all,famincedu,3,2,10542,0.3079287734775277
+USA,adcont,all,famincedu,3,3,10542,0.30825571748075875
