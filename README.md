@@ -18,7 +18,7 @@ This project uses SuperLearner ensemble machine learning — combining LASSO, ra
 
 The main data files are **not included** in this folder. They come from the [Cross-National Equivalent File (CNEF)](https://cnef.ehe.osu.edu/), a harmonized set of national panel surveys. Access requires registration and approval directly from CNEF.
 
-Once you have access, you will need one file:
+The analysis come from one cleaned file:
 
 | File | Description |
 |---|---|
@@ -26,7 +26,7 @@ Once you have access, you will need one file:
 
 Place it in the `data/` folder before running any analysis scripts.
 
-The file `data/otherdata_Sept.csv` is included — it contains country-level contextual indicators (Gini coefficients, intergenerational income elasticity, etc.) used in Figure 6.
+The file `data/otherdata_Sept.csv` is included — it contains country-level contextual indicators (Gini coefficients, intergenerational income elasticity, etc.) collected from various places on the internet and used in Figure 6.
 
 ---
 
@@ -69,7 +69,7 @@ remotes::install_github("jimjam-slam/ggflags")
 
 ### Reproducing the figures
 
-If you only want to reproduce the paper figures from the pre-computed results:
+To reproduce the paper figures from the pre-computed results:
 
 1. Open `BirthLottery.Rproj`
 2. Run `code/8_figures.R`
@@ -84,9 +84,9 @@ To re-run the analysis from scratch (requires the CNEF data files):
 2. Open `BirthLottery.Rproj`
 3. Run `code/1_master_analysis.R`
 
-This is the single entry point for the full analysis and all robustness checks. By default it runs all five countries; change the `countries` vector near the top of the script to run a single country for testing (e.g. `countries <- c("AUSTRALIA")`).
+This is the single entry point for the full analysis and all robustness checks. By default it runs all five countries.
 
-**Note:** The full analysis is computationally intensive. With all five countries and default CV settings (`n_repeats = 3`, `folds_per_rep = 5`), expect several hours on a modern multi-core machine. The script parallelizes automatically using all available cores minus one.
+**Note:** The full analysis is computationally intensive. With all five countries and the CV settings used (`n_repeats = 3`, `folds_per_rep = 5`), it took about two hours to complete the full analyses. The script parallelizes automatically using all available cores minus one.
 
 ---
 
