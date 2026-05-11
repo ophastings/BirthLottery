@@ -8,7 +8,7 @@ This repository contains the replication code and results for:
 
 ## Overview
 
-This project uses SuperLearner ensemble machine learning — combining LASSO, random forests, and gradient boosting with repeated cross-validation — to predict adult life outcomes from childhood circumstances in five high-income countries: the United States, Germany, Australia, South Korea, and the United Kingdom.
+This project uses SuperLearner ensemble machine learning to predict adult life outcomes from childhood circumstances in five high-income countries: the United States, Germany, Australia, South Korea, and the United Kingdom.
 
 **Outcomes predicted:** poverty in adulthood, top 10% income, years of education, and adult income decile rank. Mobility analyses predict upward and downward mobility for children born into the bottom and top 20% of the income distribution.
 
@@ -18,15 +18,15 @@ This project uses SuperLearner ensemble machine learning — combining LASSO, ra
 
 The main data files are **not included** in this folder. They come from the [Cross-National Equivalent File (CNEF)](https://cnef.ehe.osu.edu/), a harmonized set of national panel surveys. Access requires registration and approval directly from CNEF.
 
-The analysis come from one cleaned file:
+The analysis comes from one cleaned file:
 
 | File | Description |
 |---|---|
-| `data_ready-v4.dta` | Main analysis dataset — five countries, childhood predictors ages 0–17 |
+| `data_ready-v4.dta` | Analysis dataset |
 
 Place it in the `data/` folder before running any analysis scripts.
 
-The file `data/otherdata_Sept.csv` is included — it contains country-level contextual indicators (Gini coefficients, intergenerational income elasticity, etc.) collected from various places on the internet and used in Figure 6.
+The file `data/otherdata_Sept.csv` is included. It contains country-level contextual indicators (Gini coefficients, intergenerational income elasticity, etc.) collected from various places on the internet and used in Figure 6.
 
 ---
 
@@ -49,7 +49,7 @@ Pre-computed results CSVs are included in `output/results/` so that figures can 
 
 ## Getting started
 
-**Open `BirthLottery.Rproj` in RStudio.** This sets the working directory correctly — all scripts use the `here` package to build paths relative to the project root, so they will work regardless of where the folder is stored on your machine.
+**Open `BirthLottery.Rproj` in RStudio.** This sets the working directory. All scripts use the `here` package to build paths relative to the project root, so they will work regardless of where the folder is stored on your machine.
 
 ### Required R packages
 
