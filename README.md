@@ -1,5 +1,6 @@
 # Replication Code: Predicting the Birth Lottery
 
+
 This repository contains the replication code and results for:
 
 > Hastings & Parolin. *Rags or Riches? Predicting Life Outcomes from the Birth Lottery Across Five High-Income Countries.*
