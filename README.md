@@ -2,7 +2,7 @@
 
 This repository contains the replication code and results for:
 
-> Hastings, P. *Rags or Riches? Predicting Life Outcomes from the Birth Lottery Across Five High-Income Countries.*
+> Hastings & Parolin. *Rags or Riches? Predicting Life Outcomes from the Birth Lottery Across Five High-Income Countries.*
 
 ---
 
@@ -26,7 +26,7 @@ The analysis comes from one cleaned file:
 
 Place it in the `data/` folder before running any analysis scripts.
 
-The file `data/otherdata_Sept.csv` is included. It contains country-level contextual indicators (Gini coefficients, intergenerational income elasticity, etc.) collected from various places on the internet and used in Figure 6.
+The file `data/countrydata.csv` is included. It contains country-level contextual indicators (Gini coefficients, intergenerational income elasticity, etc.) collected from various places on the internet and used in the cross-country correlation heatmap.
 
 ---
 
@@ -43,7 +43,7 @@ BirthLottery/
     └── figures/           # All paper figures (PDFs)
 ```
 
-Pre-computed results CSVs are included in `output/results/` so that figures can be reproduced without re-running the full analysis (which is computationally intensive).
+Figures can be reproduced if `output/results/` is filled, without re-running the full analysis (which is computationally intensive).
 
 ---
 
@@ -62,9 +62,8 @@ install.packages(c(
   "doParallel", "foreach", "here"
 ))
 
-# Two figure packages not on CRAN:
+# One figure package not on CRAN:
 devtools::install_github("coolbutuseless/ggpattern")
-remotes::install_github("jimjam-slam/ggflags")
 ```
 
 ### Reproducing the figures
@@ -72,7 +71,7 @@ remotes::install_github("jimjam-slam/ggflags")
 To reproduce the paper figures from the pre-computed results:
 
 1. Open `BirthLottery.Rproj`
-2. Run `code/8_figures.R`
+2. Run `code/7_figures.R`
 
 Figures are saved as PDFs to `output/figures/`.
 
@@ -84,9 +83,7 @@ To re-run the analysis from scratch (requires the CNEF data files):
 2. Open `BirthLottery.Rproj`
 3. Run `code/1_master_analysis.R`
 
-This is the single entry point for the full analysis and all robustness checks. By default it runs all five countries.
-
-**Note:** The full analysis is computationally intensive. With all five countries and the CV settings used (`n_repeats = 3`, `folds_per_rep = 5`), it took about two hours to complete the full analyses. The script parallelizes automatically using all available cores minus one.
+**Note:** The full analysis is computationally intensive. With all five countries and the CV settings used (`n_repeats = 3`, `folds_per_rep = 5`), it took about two hours to complete the full analyses on my (Pat's) computer. The script parallelizes automatically using all available cores minus one.
 
 ---
 
@@ -100,7 +97,7 @@ This is the single entry point for the full analysis and all robustness checks. 
 | `4_OLS_logit_withobs.R` | Robustness: OLS and logistic regression comparison (appendix) |
 | `5_psid.R` | Robustness: enriched PSID predictors for USA (race, wealth, health, etc.) |
 | `6_downsample.R` | Robustness: downsampling USA to smaller-country sample sizes |
-| `8_figures.R` | Standalone: reads output CSVs and produces all paper figures |
+| `7_figures.R` | Standalone: reads output CSVs and produces all paper figures |
 
 ---
 

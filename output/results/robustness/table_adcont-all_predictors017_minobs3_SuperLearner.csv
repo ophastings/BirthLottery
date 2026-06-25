@@ -1,6 +1,6 @@
 Country,Outcome,Group,Predictor_Set,Min_Obs,Sample_Size,SuperLearner
-AUSTRALIA,adcont,all,predictors017,3,1966,0.223
-GERMANY,adcont,all,predictors017,3,2214,0.303
-KOREA,adcont,all,predictors017,3,1273,0.228
-UK,adcont,all,predictors017,3,1405,0.116
-USA,adcont,all,predictors017,3,10542,0.353
+AUSTRALIA,adcont,all,predictors017,3,1966,0.228
+GERMANY,adcont,all,predictors017,3,2214,0.306
+KOREA,adcont,all,predictors017,3,1273,0.232
+UK,adcont,all,predictors017,3,1405,0.118
+USA,adcont,all,predictors017,3,10542,0.355

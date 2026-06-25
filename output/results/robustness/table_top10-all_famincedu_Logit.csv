@@ -1,6 +1,0 @@
-Country,Outcome,Group,Predictor_Set,Min_Obs,Sample_Size,R2
-AUSTRALIA,top10,all,famincedu,1,2512,0.042
-GERMANY,top10,all,famincedu,1,2765,0.097
-KOREA,top10,all,famincedu,1,2126,0.121
-UK,top10,all,famincedu,1,2528,0.051
-USA,top10,all,famincedu,1,11519,0.127

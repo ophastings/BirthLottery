@@ -1,2 +1,0 @@
-Country,Outcome,Group,Predictor_Set,Min_Obs,Rep,Sample_Size,SuperLearner
-USA,top10,all,predictorsusa,1,1,11519,0.17382345298318513

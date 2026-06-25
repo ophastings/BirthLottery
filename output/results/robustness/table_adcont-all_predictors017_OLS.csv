@@ -1,6 +1,0 @@
-Country,Outcome,Group,Predictor_Set,Min_Obs,Sample_Size,R2
-AUSTRALIA,adcont,all,predictors017,1,2512,0.193
-GERMANY,adcont,all,predictors017,1,2765,0.256
-KOREA,adcont,all,predictors017,1,2126,0.22
-UK,adcont,all,predictors017,1,1843,0.111
-USA,adcont,all,predictors017,1,11518,0.32

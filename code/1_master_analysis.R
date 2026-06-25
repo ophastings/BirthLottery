@@ -34,8 +34,8 @@ df_cleaned <- df
 
 # --- Predictor sets ---
 
-predictors017 <- c(childinc, covar_basic, vars_017, miss_vars, miss017_vars, parent_cols_names, indus_cols_names, years_cols_names)
-predictors010 <- c(childinc_010, covar_basic, vars_010, miss_vars, miss010_vars, parent_cols_names, indus_cols_names, years_cols_names)
+predictors017 <- c(childinc, covar_basic, vars_017, miss_vars, miss017_vars, parent_cols_names, occindus_cols_names, years_cols_names)
+predictors010 <- c(childinc_010, covar_basic, vars_010, miss_vars, miss010_vars, parent_cols_names, occindus_cols_names, years_cols_names)
 predictorsusa <- c(predictors017, usa, missusa_vars)
 
 parentedu <- c(parent_cols_names, "miss_edu_attain_mom", "miss_edu_attain_dad")

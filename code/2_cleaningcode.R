@@ -32,8 +32,8 @@ childinc <- paste0("d_ch_", 1:10)
 childinc_010  <- paste0("d_ch_010_",  1:10)
 childinc_1117 <- paste0("d_ch_1117_", 1:10)
 
-# Industry and education variables
-indus <- c("industry_mom", "industry_dad")
+# Occupation, industry, and education variables
+occindus <- c("industry_mom", "industry_dad", "occupation1_mom", "occupation1_dad")
 
 parent_attain_categories <- c("edu_attain_mom", "edu_attain_dad")
 parent_attain_years      <- c("edu_years_mom",  "edu_years_dad")
@@ -51,7 +51,7 @@ years <- c("year_age25")
 # --- Missing indicator creation ---
 # For each variable: create a miss_* indicator (1 = missing) and recode NA to -1
 
-all_vars <- c(covar_basic, indus, parent_attain_categories)
+all_vars <- c(covar_basic, occindus, parent_attain_categories)
 
 for (x in all_vars) {
   df[[paste0("miss_", x)]] <- as.integer(is.na(df[[x]]))
@@ -80,11 +80,11 @@ for (x in usa) {
 
 # --- Dummy coding ---
 
-df[indus] <- lapply(df[indus], as.factor)
+df[occindus] <- lapply(df[occindus], as.factor)
 
 df <- dummy_cols(
   df,
-  select_columns       = c(indus, years, parent_attain_categories),
+  select_columns       = c(occindus, years, parent_attain_categories),
   remove_selected_columns = TRUE
 )
 
@@ -93,9 +93,9 @@ df <- df |> select(-ends_with("-1"))
 
 # --- Collect variable name lists for predictor set construction ---
 
-indus_cols_names  <- names(df)[grepl("^(industry_mom_|industry_dad_)", names(df))]
-years_cols_names  <- names(df)[grepl("^(year_age25_)",                 names(df))]
-parent_cols_names <- names(df)[grepl("^(edu_attain_mom_|edu_attain_dad_)", names(df))]
+occindus_cols_names <- names(df)[grepl("^(industry_mom_|industry_dad_|occupation1_mom_|occupation1_dad_)", names(df))]
+years_cols_names    <- names(df)[grepl("^(year_age25_)",                 names(df))]
+parent_cols_names   <- names(df)[grepl("^(edu_attain_mom_|edu_attain_dad_)", names(df))]
 
 miss_vars     <- names(df)[grepl("^miss_",     names(df))]
 missusa_vars  <- names(df)[grepl("^missusa_",  names(df))]

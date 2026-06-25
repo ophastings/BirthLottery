@@ -1,14 +1,11 @@
-# 8_figures.R — All six paper figures
 # Standalone script: reads output/ and robustness/ CSVs; saves to output/figures/
 #
 # Required packages (install once if missing):
 #   tidyverse, haven, here
 #   ggpattern  — devtools::install_github("coolbutuseless/ggpattern")
-#   ggflags    — remotes::install_github("jimjam-slam/ggflags")
 
 library(tidyverse)
 library(ggpattern)
-library(ggflags)
 library(haven)
 library(here)
 
@@ -132,28 +129,6 @@ ggsave(file.path(fig_dir, "plot_fullsample_bars.pdf"),
        width = 8, height = 8, units = "in")
 cat("Saved: plot_fullsample_bars.pdf\n")
 
-# Alternate version — grouped bars (one bar per predictor set per country)
-# complete() adds NA rows for Korea's missing ages 0-10 so all bars are equal width
-df_main_bars <- df_main |>
-  complete(Country, Panel, key)
-
-ggplot(df_main_bars, aes(x = SuperLearner, y = Country, fill = key)) +
-  geom_vline(xintercept = 0, linewidth = .5, linetype = "dashed") +
-  geom_col(
-    position = position_dodge(width = 0.7),
-    width    = 0.6,
-    alpha    = 0.85
-  ) +
-  facet_wrap(~ Panel, ncol = 2, labeller = labeller(Panel = panel_labels_main)) +
-  scale_fill_manual(values = pred_cols) +
-  base_theme() +
-  labs(x = expression(R^2), y = "Country", fill = NULL) +
-  guides(fill = guide_legend(reverse = TRUE))
-
-ggsave(file.path(fig_dir, "plot_fullsample_bars_v2.pdf"),
-       width = 8, height = 8, units = "in")
-cat("Saved: plot_fullsample_bars_v2.pdf\n")
-
 # ============================================================
 # Figure 2 — Mobility (fig-mobility)
 # ============================================================
@@ -175,7 +150,8 @@ panel_labels_mob <- set_names(
 )
 
 df_mob <- map_dfr(mobility_spec, function(s) {
-  map_dfr(pred_sets_main, function(ps) {
+  # Mobility figure omits the family income & education benchmark point
+  map_dfr(setdiff(pred_sets_main, "famincedu"), function(ps) {
     read_table(output_dir, s$out, s$grp, ps) |>
       mutate(pred_set = ps, panel = s$panel)
   })
@@ -328,58 +304,63 @@ cat("Saved: USA_psid_plot.pdf\n")
 # ============================================================
 # Figure 5 — Explanation vs Prediction (fig-example)
 # ============================================================
+# Unlike the other figures, this one is built from the raw CNEF microdata
+# (data_ready-v4.dta), not the summary result tables. That file is CNEF-restricted
+# and is not distributed with this repository, so this figure is skipped when it
+# is absent; the rest of the script still runs.
 
-df <- read_dta(here("data", "data_ready-v4.dta")) |>
-  rename(
-    poverty       = poverty_2426,
-    education     = years_of_edu,
-    child_obs     = obsage_017_c,
-    edu_years_mom = edu_attain_mom_years,
-    edu_years_dad = edu_attain_dad_years
-  )
-source(file.path(scripts, "2_cleaningcode.R"))
+dta_path <- here("data", "data_ready-v4.dta")
 
-df_usa <- df |>
-  filter(country == "USA") |>
-  drop_na(chcont, adcont)
+if (!file.exists(dta_path)) {
+  cat("Skipped: explanation_vs_prediction_income.pdf (data_ready-v4.dta not found)\n")
+} else {
+  df <- read_dta(dta_path) |>
+    rename(
+      poverty       = poverty_2426,
+      education     = years_of_edu,
+      child_obs     = obsage_017_c,
+      edu_years_mom = edu_attain_mom_years,
+      edu_years_dad = edu_attain_dad_years
+    )
+  source(file.path(scripts, "2_cleaningcode.R"))
 
-ggplot(df_usa, aes(factor(chcont), adcont)) +
-  geom_point(
-    alpha    = .6,
-    color    = col_mid,
-    position = position_jitter(width = 0.2, height = 0.2),
-    size     = .2
-  ) +
-  stat_summary(color = col_full) +
-  stat_summary(
-    fun.data = "mean_cl_normal",
-    geom     = "errorbar",
-    width    = .4,
-    color    = col_full
-  ) +
-  scale_y_continuous(breaks = 1:10, limits = c(0.5, 10.5)) +
-  theme_minimal() +
-  labs(
-    x       = "Child Income Decile",
-    y       = "Adult Income Decile",
-    caption = "Source: CNEF/Panel Study of Income Dynamics (USA)"
-  )
+  df_usa <- df |>
+    filter(country == "USA") |>
+    drop_na(chcont, adcont)
 
-ggsave(file.path(fig_dir, "explanation_vs_prediction_income.pdf"),
-       width = 8, height = 6, units = "in")
-cat("Saved: explanation_vs_prediction_income.pdf\n")
+  p_fig5 <- ggplot(df_usa, aes(factor(chcont), adcont)) +
+    geom_point(
+      alpha    = .6,
+      color    = col_mid,
+      position = position_jitter(width = 0.2, height = 0.2),
+      size     = .2
+    ) +
+    stat_summary(color = "#C0392B") +
+    stat_summary(
+      fun.data = "mean_cl_normal",
+      geom     = "errorbar",
+      width    = .4,
+      color    = "#C0392B"
+    ) +
+    scale_y_continuous(breaks = 1:10, limits = c(0.5, 10.5)) +
+    theme_minimal() +
+    labs(
+      x       = "Childhood Family Income Decile",
+      y       = "Adult Income Decile",
+      caption = "Source: CNEF/Panel Study of Income Dynamics (USA)"
+    )
+
+  ggsave(file.path(fig_dir, "explanation_vs_prediction_income.pdf"),
+         plot = p_fig5, width = 8, height = 6, units = "in")
+  cat("Saved: explanation_vs_prediction_income.pdf\n")
+}
 
 # ============================================================
-# Figure 6 — Gini & IGE (fig-other)
+# Country-level indicators (used by the correlation heatmap below)
 # ============================================================
-
-abbrevs <- tibble(
-  Country = c("USA", "GERMANY", "AUSTRALIA", "KOREA", "UK"),
-  Code    = c("us", "de", "au", "kr", "gb")
-)
 
 comparisons <- read_csv(
-  here("data", "otherdata_Sept.csv"),
+  here("data", "countrydata.csv"),
   show_col_types = FALSE
 ) |>
   mutate(Country = case_when(
@@ -390,78 +371,89 @@ comparisons <- read_csv(
   )) |>
   filter(Country != "Switzerland")
 
-outcome_labels_other <- c(
-  poverty   = "Poverty",
-  top10     = "Top 10% Income",
-  education = "Education",
-  adcont    = "Income Decile"
-)
-
-df_other <- map_dfr(outcomes_main, function(out) {
-  read_table(output_dir, out, "all", "predictors017") |>
-    mutate(
-      Country = toupper(Country),
-      R2_Type = factor(
-        outcome_labels_other[[out]],
-        levels = c("Poverty", "Top 10% Income", "Education", "Income Decile")
-      )
-    ) |>
-    rename(R2 = SuperLearner) |>
-    left_join(comparisons, by = "Country") |>
-    left_join(abbrevs, by = "Country")
-})
-
-df_grid <- df_other |>
-  select(R2_Type, R2, Code, gini_2020, IGE_gdim) |>
-  pivot_longer(c(gini_2020, IGE_gdim), names_to = "Metric", values_to = "X") |>
-  mutate(
-    Metric = factor(
-      Metric,
-      levels = c("gini_2020", "IGE_gdim"),
-      labels = c("Income Inequality (Gini)", "Intergenerational Mobility (Elasticity)")
-    )
-  )
-
-lab_grid <- df_grid |>
-  filter(!is.na(X), !is.na(R2)) |>
-  group_by(R2_Type, Metric) |>
-  reframe(
-    n = n(),
-    r = if (n >= 3) cor(X, R2, use = "complete.obs") else NA_real_
-  ) |>
-  left_join(
-    df_grid |>
-      group_by(R2_Type, Metric) |>
-      summarise(
-        label_x = max(X, na.rm = TRUE) - 0.05 * diff(range(X, na.rm = TRUE)),
-        label_y = min(R2, na.rm = TRUE) + 0.05 * diff(range(R2, na.rm = TRUE)),
-        .groups = "drop"
-      ),
-    by = c("R2_Type", "Metric")
-  ) |>
-  mutate(label = ifelse(is.na(r), "r = NA",
-                        paste0("r = ", formatC(r, digits = 2, format = "f"))))
-
-ggplot(df_grid, aes(x = X, y = R2)) +
-  geom_smooth(method = "lm", se = FALSE, color = "gray50", linetype = "dashed") +
-  geom_flag(aes(country = Code), size = 10) +
-  geom_text(
-    data = lab_grid,
-    aes(x = label_x, y = label_y, label = label),
-    hjust = 1, vjust = 0, size = 5, fontface = "bold"
-  ) +
-  facet_grid(rows = vars(R2_Type), cols = vars(Metric), scales = "free") +
-  theme_minimal() +
-  theme(
-    strip.background = element_rect(fill = "gray90", color = NA),
-    strip.text       = element_text(face = "bold"),
-    axis.text.y      = element_text(size = 10)
-  ) +
-  labs(x = NULL, y = expression("Predictability (SuperLearner " * R^2 * ")"))
-
-ggsave(file.path(fig_dir, "r2_grid_gini_IGE.pdf"),
-       width = 8, height = 11, units = "in")
-cat("Saved: r2_grid_gini_IGE.pdf\n")
+# ============================================================
+# Figure 6 — Gini & IGE (fig-other)  [Not in final paper]
+# ============================================================
+# This country-flag scatter used geom_flag() from the ggflags package and was
+# cut from the final paper, so it is disabled.
+#
+# abbrevs <- tibble(
+#   Country = c("USA", "GERMANY", "AUSTRALIA", "KOREA", "UK"),
+#   Code    = c("us", "de", "au", "kr", "gb")
+# )
+#
+# outcome_labels_other <- c(
+#   poverty   = "Poverty",
+#   top10     = "Top 10% Income",
+#   education = "Education",
+#   adcont    = "Income Decile"
+# )
+#
+# df_other <- map_dfr(outcomes_main, function(out) {
+#   read_table(output_dir, out, "all", "predictors017") |>
+#     mutate(
+#       Country = toupper(Country),
+#       R2_Type = factor(
+#         outcome_labels_other[[out]],
+#         levels = c("Poverty", "Top 10% Income", "Education", "Income Decile")
+#       )
+#     ) |>
+#     rename(R2 = SuperLearner) |>
+#     left_join(comparisons, by = "Country") |>
+#     left_join(abbrevs, by = "Country")
+# })
+#
+# df_grid <- df_other |>
+#   select(R2_Type, R2, Code, gini_2020, IGE_gdim) |>
+#   pivot_longer(c(gini_2020, IGE_gdim), names_to = "Metric", values_to = "X") |>
+#   mutate(
+#     Metric = factor(
+#       Metric,
+#       levels = c("gini_2020", "IGE_gdim"),
+#       labels = c("Income Inequality (Gini)", "Intergenerational Mobility (Elasticity)")
+#     )
+#   )
+#
+# lab_grid <- df_grid |>
+#   filter(!is.na(X), !is.na(R2)) |>
+#   group_by(R2_Type, Metric) |>
+#   reframe(
+#     n = n(),
+#     r = if (n >= 3) cor(X, R2, use = "complete.obs") else NA_real_
+#   ) |>
+#   left_join(
+#     df_grid |>
+#       group_by(R2_Type, Metric) |>
+#       summarise(
+#         label_x = max(X, na.rm = TRUE) - 0.05 * diff(range(X, na.rm = TRUE)),
+#         label_y = min(R2, na.rm = TRUE) + 0.05 * diff(range(R2, na.rm = TRUE)),
+#         .groups = "drop"
+#       ),
+#     by = c("R2_Type", "Metric")
+#   ) |>
+#   mutate(label = ifelse(is.na(r), "r = NA",
+#                         paste0("r = ", formatC(r, digits = 2, format = "f"))))
+#
+# ggplot(df_grid, aes(x = X, y = R2)) +
+#   geom_smooth(method = "lm", se = FALSE, color = "gray50", linetype = "dashed") +
+#   geom_flag(aes(country = Code), size = 10) +
+#   geom_text(
+#     data = lab_grid,
+#     aes(x = label_x, y = label_y, label = label),
+#     hjust = 1, vjust = 0, size = 5, fontface = "bold"
+#   ) +
+#   facet_grid(rows = vars(R2_Type), cols = vars(Metric), scales = "free") +
+#   theme_minimal() +
+#   theme(
+#     strip.background = element_rect(fill = "gray90", color = NA),
+#     strip.text       = element_text(face = "bold"),
+#     axis.text.y      = element_text(size = 10)
+#   ) +
+#   labs(x = NULL, y = expression("Predictability (SuperLearner " * R^2 * ")"))
+#
+# ggsave(file.path(fig_dir, "r2_grid_gini_IGE.pdf"),
+#        width = 8, height = 11, units = "in")
+# cat("Saved: r2_grid_gini_IGE.pdf\n")
 
 # ============================================================
 # Figure 7 — Correlation heatmap (fig-corr-heatmap)

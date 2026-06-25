@@ -7,5 +7,21 @@
 # Data files (require CNEF access — not for distribution)
 data/*.dta
 
+# Generated output.
+# Summary result tables (table_*_SuperLearner.csv) and the downsampling summary
+# are committed so the figures in 7_figures.R can be reproduced without re-running
+# the full analysis. The bulky per-replication files, model weights, logs, and the
+# rendered figures themselves are not published.
+output/results/*
+!output/results/robustness/
+!output/results/.gitkeep
+!output/results/table_*_SuperLearner.csv
+output/results/robustness/*
+!output/results/robustness/.gitkeep
+!output/results/robustness/table_*_SuperLearner.csv
+!output/results/robustness/downsample_r2_summary.csv
+output/figures/*
+!output/figures/.gitkeep
+
 # OS
 .DS_Store

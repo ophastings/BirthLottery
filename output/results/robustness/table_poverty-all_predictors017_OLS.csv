@@ -1,6 +1,0 @@
-Country,Outcome,Group,Predictor_Set,Min_Obs,Sample_Size,R2
-AUSTRALIA,poverty,all,predictors017,1,2512,0.054
-GERMANY,poverty,all,predictors017,1,2765,0.047
-KOREA,poverty,all,predictors017,1,2126,0.038
-UK,poverty,all,predictors017,1,1843,-0.005
-USA,poverty,all,predictors017,1,11518,0.201

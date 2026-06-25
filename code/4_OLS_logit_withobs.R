@@ -11,7 +11,7 @@
 #   subset_group() — function defined in master
 #   robustness_dir — output path (separate from main results)
 #
-# Note: predictors017 with OLS/logit will overfit badly — that's the point.
+# Note: predictors017 with OLS/logit will overfit badly.
 # Warnings about perfect separation in logit are expected and can be ignored.
 
 predictor_sets <- list(
