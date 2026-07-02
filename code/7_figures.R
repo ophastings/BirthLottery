@@ -129,6 +129,28 @@ ggsave(file.path(fig_dir, "plot_fullsample_bars.pdf"),
        width = 8, height = 8, units = "in")
 cat("Saved: plot_fullsample_bars.pdf\n")
 
+# Alternate version — grouped bars (one bar per predictor set per country)
+# complete() adds NA rows for Korea's missing ages 0-10 so all bars are equal width
+df_main_bars <- df_main |>
+  complete(Country, Panel, key)
+
+ggplot(df_main_bars, aes(x = SuperLearner, y = Country, fill = key)) +
+  geom_vline(xintercept = 0, linewidth = .5, linetype = "dashed") +
+  geom_col(
+    position = position_dodge(width = 0.7),
+    width    = 0.6,
+    alpha    = 0.85
+  ) +
+  facet_wrap(~ Panel, ncol = 2, labeller = labeller(Panel = panel_labels_main)) +
+  scale_fill_manual(values = pred_cols) +
+  base_theme() +
+  labs(x = expression(R^2), y = "Country", fill = NULL) +
+  guides(fill = guide_legend(reverse = TRUE))
+
+ggsave(file.path(fig_dir, "plot_fullsample_bars_v2.pdf"),
+       width = 8, height = 8, units = "in")
+cat("Saved: plot_fullsample_bars_v2.pdf\n")
+
 # ============================================================
 # Figure 2 — Mobility (fig-mobility)
 # ============================================================
@@ -372,10 +394,12 @@ comparisons <- read_csv(
   filter(Country != "Switzerland")
 
 # ============================================================
-# Figure 6 — Gini & IGE (fig-other)  [Not in final paper]
+# Figure 6 — Gini & IGE (fig-other)  [REMOVED — not in final paper]
 # ============================================================
 # This country-flag scatter used geom_flag() from the ggflags package and was
-# cut from the final paper, so it is disabled.
+# cut from the final paper, so it is disabled. Left commented for reference.
+# (The `comparisons` country data it relied on is loaded above because the
+# correlation heatmap still needs it.)
 #
 # abbrevs <- tibble(
 #   Country = c("USA", "GERMANY", "AUSTRALIA", "KOREA", "UK"),
@@ -469,13 +493,13 @@ heat_factors <- c(
   Global_Social_Mobility_Index = "Global Social Mobility Index"
 )
 
-heat_outcome_levels <- c("Poverty", "Top 10%", "Education", "Income Decile")
+heat_outcome_levels <- c("Predictability\nof Poverty", "Predictability\nof Top 10%", "Predictability\nof Education", "Predictability\nof Income Decile")
 
 heat_outcome_labels <- c(
-  poverty   = "Poverty",
-  top10     = "Top 10%",
-  education = "Education",
-  adcont    = "Income Decile"
+  poverty   = "Predictability\nof Poverty",
+  top10     = "Predictability\nof Top 10%",
+  education = "Predictability\nof Education",
+  adcont    = "Predictability\nof Income Decile"
 )
 
 df_heat_long <- map_dfr(outcomes_main, function(out) {
