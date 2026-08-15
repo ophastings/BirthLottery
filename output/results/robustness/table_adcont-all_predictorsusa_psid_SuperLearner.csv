@@ -1,2 +1,2 @@
 Country,Outcome,Group,Predictor_Set,Min_Obs,Sample_Size,SuperLearner
-USA,adcont,all,predictorsusa,1,11518,0.373
+USA,adcont,all,predictorsusa,1,11518,0.361

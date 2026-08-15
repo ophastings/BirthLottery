@@ -1,6 +1,6 @@
 Country,Outcome,Group,Predictor_Set,Min_Obs,Sample_Size,SuperLearner
-AUSTRALIA,poverty,all,predictors017,3,1966,0.084
-GERMANY,poverty,all,predictors017,3,2214,0.072
-KOREA,poverty,all,predictors017,3,1273,0.059
-UK,poverty,all,predictors017,3,1405,0.021
-USA,poverty,all,predictors017,3,10542,0.231
+AUSTRALIA,poverty,all,predictors017,3,1966,0.077
+GERMANY,poverty,all,predictors017,3,2214,0.016
+KOREA,poverty,all,predictors017,3,1273,0.03
+UK,poverty,all,predictors017,3,1405,0.019
+USA,poverty,all,predictors017,3,10542,0.227

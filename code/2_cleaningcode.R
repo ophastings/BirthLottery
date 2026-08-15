@@ -2,9 +2,9 @@ library(fastDummies)
 
 # Basic demographic and childhood observation covariates
 covar_basic <- c(
-  "female", "first_age_obs", "living_child_head",
+  "female", "first_age_obs",
   "age_of_mom_at_birth", "age_of_dad_at_birth",
-  "obsage_05", "obsage_610", "obsage_1117", "age_max"
+  "obsage_05", "obsage_610", "obsage_1117"
 )
 
 # Childhood circumstance variables (full childhood, ages 0-10, ages 11-17)

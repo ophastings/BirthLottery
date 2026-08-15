@@ -105,7 +105,9 @@ df_main <- map_dfr(outcomes_main, function(out) {
   filter(!(pred_set == "predictors010" & Country == "Korea")) |>
   filter(!is.na(key))
 
-df_bars_main <- df_main |> filter(pred_set == "predictors017")
+df_bars_main <- df_main |>
+  filter(pred_set == "predictors017") |>
+  mutate(lab = sprintf("%.2f", SuperLearner))   # full-model R2 label at each bar tip
 
 ggplot() +
   geom_vline(xintercept = 0, linewidth = .5, linetype = "dashed") +
@@ -119,9 +121,15 @@ ggplot() +
     aes(x = SuperLearner, y = Country, shape = key, color = key),
     size = 5, alpha = 0.8
   ) +
+  geom_text(
+    data = df_bars_main,
+    aes(x = SuperLearner, y = Country, label = lab),
+    hjust = 0, nudge_x = 0.016, size = 3, color = "gray25"
+  ) +
   facet_wrap(~ Panel, ncol = 2, labeller = labeller(Panel = panel_labels_main)) +
   scale_color_manual(values = pred_cols) +
   scale_shape_manual(values = pred_shapes) +
+  scale_x_continuous(expand = expansion(mult = c(0.02, 0.13))) +
   base_theme() +
   labs(x = expression(R^2), y = "Country", color = NULL, shape = NULL)
 
@@ -171,44 +179,44 @@ panel_labels_mob <- set_names(
   map_chr(mobility_spec, ~ .x$panel)
 )
 
+# Mobility figure shows the FULL model only (predictors017): the subsamples are
+# conditioned on childhood income, so the benchmark / ages 0-10 models add little
+# and only invite over-reading noise. One point per country; value labels; no legend.
 df_mob <- map_dfr(mobility_spec, function(s) {
-  # Mobility figure omits the family income & education benchmark point
-  map_dfr(setdiff(pred_sets_main, "famincedu"), function(ps) {
-    read_table(output_dir, s$out, s$grp, ps) |>
-      mutate(pred_set = ps, panel = s$panel)
-  })
+  read_table(output_dir, s$out, s$grp, "predictors017") |>
+    mutate(panel = s$panel)
 }) |>
   mutate(
     Country = fmt_country(Country),
     Country = factor(Country, levels = country_levels),
-    key     = factor(pred_set_key(pred_set), levels = names(pred_cols)),
-    panel   = factor(panel, levels = names(panel_labels_mob))
-  ) |>
-  filter(!(pred_set == "predictors010" & Country == "Korea")) |>
-  filter(!is.na(key))
+    panel   = factor(panel, levels = names(panel_labels_mob)),
+    lab     = sub("^-0\\.00$", "0.00", sprintf("%.2f", SuperLearner)),
+    labx    = SuperLearner + ifelse(SuperLearner >= 0, 0.010, -0.006),
+    labh    = ifelse(SuperLearner >= 0, 0, 1)
+  )
 
-df_bars_mob <- df_mob |> filter(pred_set == "predictors017")
-
-ggplot() +
+ggplot(df_mob) +
   geom_vline(xintercept = 0, linewidth = .5, linetype = "dashed") +
   geom_segment(
-    data = df_bars_mob,
     aes(x = 0, xend = SuperLearner, y = Country, yend = Country),
     color = col_bar, linewidth = 4
   ) +
   geom_point(
-    data = df_mob,
-    aes(x = SuperLearner, y = Country, shape = key, color = key),
-    size = 5, alpha = 0.8
+    aes(x = SuperLearner, y = Country),
+    color = col_full, shape = 15, size = 4.5
+  ) +
+  geom_text(
+    aes(x = labx, y = Country, label = lab),
+    hjust = df_mob$labh, size = 3, color = "gray25"
   ) +
   facet_wrap(~ panel, ncol = 2, labeller = labeller(panel = panel_labels_mob)) +
-  scale_color_manual(values = pred_cols) +
-  scale_shape_manual(values = pred_shapes) +
+  scale_x_continuous(expand = expansion(mult = c(0.22, 0.16))) +
   base_theme() +
-  labs(x = expression(R^2), y = "Country", color = NULL, shape = NULL)
+  theme(legend.position = "none") +
+  labs(x = expression(R^2), y = "Country")
 
 ggsave(file.path(fig_dir, "plot_mobility_bars.pdf"),
-       width = 8, height = 8, units = "in")
+       width = 8, height = 6.5, units = "in")
 cat("Saved: plot_mobility_bars.pdf\n")
 
 # ============================================================
@@ -391,7 +399,7 @@ comparisons <- read_csv(
     Country == "United Kingdom"~ "UK",
     TRUE                       ~ toupper(Country)
   )) |>
-  filter(Country != "Switzerland")
+  filter(Country != "SWITZERLAND")   # Country was upper-cased just above
 
 # ============================================================
 # Figure 6 — Gini & IGE (fig-other)  [REMOVED — not in final paper]
@@ -554,6 +562,48 @@ ggplot(df_cors, aes(x = outcome_label, y = factor_label, fill = r)) +
 ggsave(file.path(fig_dir, "correlation_heatmap.pdf"),
        width = 8, height = 3.8, units = "in")
 cat("Saved: correlation_heatmap.pdf\n")
+
+# ============================================================
+# Figure 8 — Correlation matrix among the country-level indicators
+# ============================================================
+# Same indicators and order as the fig-corr-heatmap above (reuses heat_factors),
+# shown as a lower-triangle correlation matrix across the 5 study countries.
+
+cm_ord <- names(heat_factors)
+cm_M   <- comparisons |>
+  select(all_of(cm_ord)) |>
+  cor(use = "pairwise.complete.obs")
+
+cm_df <- as.data.frame(cm_M) |>
+  rownames_to_column("Var1") |>
+  pivot_longer(-Var1, names_to = "Var2", values_to = "r") |>
+  mutate(xi = match(Var1, cm_ord), yi = match(Var2, cm_ord)) |>
+  filter(xi <= yi) |>                                            # lower triangle + diagonal
+  mutate(
+    x = factor(heat_factors[Var1], levels = heat_factors),
+    y = factor(heat_factors[Var2], levels = rev(heat_factors))
+  )
+
+ggplot(cm_df, aes(x = x, y = y, fill = r)) +
+  geom_tile(color = "white", linewidth = 0.8) +
+  geom_text(aes(label = ifelse(is.na(r), "--", sprintf("%.2f", r))),
+            size = 9 / .pt, fontface = "bold",
+            color = ifelse(!is.na(cm_df$r) & abs(cm_df$r) > 0.6, "white", "gray20")) +
+  scale_fill_gradient2(low = col_bench, mid = "white", high = col_full,
+                       midpoint = 0, limits = c(-1, 1), name = "r", na.value = "gray85") +
+  coord_fixed() +
+  theme_minimal(base_size = 11) +
+  theme(
+    axis.text.x     = element_text(angle = 45, hjust = 1, vjust = 1),
+    axis.text.y     = element_text(hjust = 1),
+    panel.grid      = element_blank(),
+    legend.position = "right"
+  ) +
+  labs(x = NULL, y = NULL)
+
+ggsave(file.path(fig_dir, "country_indicator_cormatrix.pdf"),
+       width = 8.5, height = 7, units = "in")
+cat("Saved: country_indicator_cormatrix.pdf\n")
 
 # ============================================================
 # Figure A1 — Robustness: minobs3 (appendix)

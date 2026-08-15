@@ -1,2 +1,2 @@
 Country,Outcome,Group,Predictor_Set,Min_Obs,Sample_Size,SuperLearner
-USA,poverty,all,predictorsusa,1,11518,0.247
+USA,poverty,all,predictorsusa,1,11518,0.244
